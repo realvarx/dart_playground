@@ -13,6 +13,7 @@ dependencies:
   at_onboarding_cli: ^1.4.3
   at_utils: ^3.0.16
   version: ^3.0.2
+  crypto: ^3.0.3
   # path: ^1.8.0
 
 dev_dependencies:

@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:args/args.dart';
 import 'package:at_client/at_client.dart';
 import 'package:at_utils/at_utils.dart';
+import 'package:crypto/crypto.dart';
 import 'package:dart_playground/util.dart';
 
 Future<void> main(List<String> arguments) async {
@@ -61,7 +63,14 @@ Future<void> main(List<String> arguments) async {
 
   atKey.metadata = metadata;
 
+  var bytesKey = utf8.encode(atKey.toString());
+  var digestKey = sha256.convert(bytesKey);
+  
+  var bytesValue = utf8.encode(atKeyValue);
+  var digestValue = sha256.convert(bytesValue);
+
   print('Putting ${atKey.toString()} with value $atKeyValue');
+  print('\tsha256digest ("key" : "value") => "$digestKey" : "$digestValue"');
 
   bool success = await atClient.put(atKey, atKeyValue,
       putRequestOptions: PutRequestOptions()..useRemoteAtServer = true);
