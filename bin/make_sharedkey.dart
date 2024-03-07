@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:args/args.dart';
 import 'package:at_client/at_client.dart';
+import 'package:at_utils/at_utils.dart';
 import 'package:dart_playground/util.dart';
 
 Future<void> main(List<String> arguments) async {
@@ -33,6 +36,8 @@ Future<void> main(List<String> arguments) async {
     return;
   }
 
+  AtSignLogger.root_level = "shout";
+
   final String sharedByAtSign = argResults['sharedby'];
   final String sharedWithAtSign = argResults['sharedwith'];
   final String atKeyName = argResults['name'];
@@ -58,11 +63,13 @@ Future<void> main(List<String> arguments) async {
 
   print('Putting ${atKey.toString()} with value $atKeyValue');
 
-  bool success = await atClient.put(atKey, atKeyValue);
+  bool success = await atClient.put(atKey, atKeyValue,
+      putRequestOptions: PutRequestOptions()..useRemoteAtServer = true);
   if (success) {
     print('Success');
+    exit(0);
   } else {
     print('Failed');
+    exit(1);
   }
-  atClient.syncService.sync();
 }
